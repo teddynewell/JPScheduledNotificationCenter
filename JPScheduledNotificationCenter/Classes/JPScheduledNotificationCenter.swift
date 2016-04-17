@@ -7,16 +7,16 @@
 
 import UIKit
 
-class JPScheduledNotificationCenter {
+public class JPScheduledNotificationCenter {
     
-    static let defaultCenter = JPScheduledNotificationCenter(notificationCenter: NSNotificationCenter.defaultCenter())
+    public static let defaultCenter = JPScheduledNotificationCenter(notificationCenter: NSNotificationCenter.defaultCenter())
     
     private var notificationCenter:NSNotificationCenter
     private var notifications:[JPScheduledNotification] = [JPScheduledNotification]()
     private var pendingNotification:JPScheduledNotification?
     private var notificationTimer:NSTimer?
     
-    required init(notificationCenter: NSNotificationCenter) {
+    public required init(notificationCenter: NSNotificationCenter) {
         self.notificationCenter = notificationCenter
     }
     
@@ -24,12 +24,12 @@ class JPScheduledNotificationCenter {
     
     // MARK: manage notifications
     // convenience method
-    func scheduleNotification(notification: NSNotification, fireDate: NSDate) {
+    public func scheduleNotification(notification: NSNotification, fireDate: NSDate) {
         scheduleNotification(JPScheduledNotification(fireDate: fireDate, notification: notification))
     }
     
     // actual method
-    func scheduleNotification(notification: JPScheduledNotification) {
+    public func scheduleNotification(notification: JPScheduledNotification) {
         if let nextNotification = pendingNotification {
             if notification.fireDate.compare(nextNotification.fireDate) == .OrderedAscending {
                 pendingNotification = nil
@@ -41,18 +41,18 @@ class JPScheduledNotificationCenter {
     }
     
     // cancel method
-    func cancelAllNotifications() {
+    public func cancelAllNotifications() {
         notifications.removeAll()
     }
     
     // cancel one notifications
-    func cancelNotification(notification:JPScheduledNotification) {
+    public func cancelNotification(notification:JPScheduledNotification) {
         notifications = notifications.filter { (n) -> Bool in
             n !== notification
         }
     }
     
-    func cancelNotification(notification:NSNotification) {
+    public func cancelNotification(notification:NSNotification) {
         notifications = notifications.filter { (n) -> Bool in
             n.notification !== notification
         }
