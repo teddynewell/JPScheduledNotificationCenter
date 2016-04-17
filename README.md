@@ -28,7 +28,7 @@ JPScheduledNotificationCenter is available through [CocoaPods](http://cocoapods.
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod "JPScheduledNotificationCenter"
+pod "JPScheduledNotificationCenter", :git => "https://github.com/JamesPerlman/JPScheduledNotificationCenter.git"
 ```
 
 ## Author
