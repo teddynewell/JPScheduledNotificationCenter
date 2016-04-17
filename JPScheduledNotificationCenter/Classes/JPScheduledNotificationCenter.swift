@@ -76,7 +76,7 @@ public class JPScheduledNotificationCenter {
             return n1.fireDate.compare(n2.fireDate) == .OrderedAscending
         }
         
-        if let nextNotification = notifications.last {
+        if let nextNotification = notifications.first {
             pendingNotification = nextNotification
             notificationTimer = NSTimer(fireDate: nextNotification.fireDate, interval: 0, target: self, selector: #selector(fireNotification), userInfo: nil, repeats: false)
             NSRunLoop.mainRunLoop().addTimer(notificationTimer!, forMode: NSRunLoopCommonModes)
