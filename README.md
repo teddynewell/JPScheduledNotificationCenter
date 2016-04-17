@@ -7,7 +7,18 @@
 
 ## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+A Scheduled NSNotification manager.  Solution to http://stackoverflow.com/questions/36670453/scheduled-nsnotification-instead-of-uilocalnotification-swift-solutions
+
+Example usage: 
+
+```swift
+let fiveMinsFromNow = NSDate(timeIntervalSinceNow: 5 * 60)
+let notification = NSNotification(name: "FiveMinutesHaveElapsed", object: nil, userInfo: nil)
+JPScheduledNotificationCenter.defaultCenter.scheduleNotification(notification, fireDate: fiveMinsFromNow)
+```
+
+This will dispatch a "FiveMinutesHaveElapsed" notification approximately five minutes from the time that code executed.
+
 
 ## Requirements
 
@@ -22,7 +33,7 @@ pod "JPScheduledNotificationCenter"
 
 ## Author
 
-JamesPerlman, jam.e.perl@gmail.com
+James Perlman
 
 ## License
 
