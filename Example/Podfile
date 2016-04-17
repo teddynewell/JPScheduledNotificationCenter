@@ -1,0 +1,8 @@
+use_frameworks!
+
+target 'JPScheduledNotificationCenter_Example', :exclusive => true do
+target 'JPScheduledNotificationCenter_Tests', :exclusive => true do
+  pod 'JPScheduledNotificationCenter', :path => '../'
+
+  
+end
