@@ -61,14 +61,14 @@ public class JPScheduledNotificationCenter {
     // MARK: internal notification management
     private func rescheduleNextNotification() {
         
-        if notificationTimer != nil {
-            notificationTimer!.invalidate()
-            notificationTimer = nil
-        }
-        
         guard pendingNotification == nil else {
             // if there's already a pending notification, nothing needs to happen here
             return
+        }
+        
+        if notificationTimer != nil {
+            notificationTimer!.invalidate()
+            notificationTimer = nil
         }
         
         notifications.sortInPlace { (n1, n2) -> Bool in
