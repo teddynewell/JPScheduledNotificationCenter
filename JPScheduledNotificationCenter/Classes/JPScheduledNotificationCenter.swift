@@ -42,19 +42,23 @@ public class JPScheduledNotificationCenter {
     
     // cancel method
     public func cancelAllNotifications() {
+        notificationTimer.invalidate()
         notifications.removeAll()
     }
     
     // cancel one notifications
     public func cancelNotification(notification:JPScheduledNotification) {
-        notifications = notifications.filter { (n) -> Bool in
-            n !== notification
-        }
+        cancelNotification(notification.notification)
     }
     
     public func cancelNotification(notification:NSNotification) {
         notifications = notifications.filter { (n) -> Bool in
             n.notification !== notification
+        }
+        
+        if notification === pendingNotification {
+            pendingNotification = nil
+            rescheduleNextNotification()
         }
     }
     
