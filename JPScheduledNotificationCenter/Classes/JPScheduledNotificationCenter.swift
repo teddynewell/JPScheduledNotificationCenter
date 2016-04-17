@@ -42,7 +42,7 @@ public class JPScheduledNotificationCenter {
     
     // cancel method
     public func cancelAllNotifications() {
-        notificationTimer.invalidate()
+        cancelTimer()
         notifications.removeAll()
     }
     
@@ -63,6 +63,14 @@ public class JPScheduledNotificationCenter {
     }
     
     // MARK: internal notification management
+    
+    private func cancelTimer() {
+        if notificationTimer != nil {
+            notificationTimer!.invalidate()
+            notificationTimer = nil
+        }
+    }
+    
     private func rescheduleNextNotification() {
         
         guard pendingNotification == nil else {
@@ -70,10 +78,7 @@ public class JPScheduledNotificationCenter {
             return
         }
         
-        if notificationTimer != nil {
-            notificationTimer!.invalidate()
-            notificationTimer = nil
-        }
+        cancelTimer()
         
         notifications.sortInPlace { (n1, n2) -> Bool in
             // n1 is before n2?
