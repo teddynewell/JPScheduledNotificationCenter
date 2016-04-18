@@ -42,23 +42,30 @@ public class JPScheduledNotificationCenter {
     
     // cancel method
     public func cancelAllNotifications() {
+        pendingNotification = nil
         cancelTimer()
         notifications.removeAll()
     }
     
     // cancel one notifications
     public func cancelNotification(notification:JPScheduledNotification) {
-        cancelNotification(notification.notification)
-    }
-    
-    public func cancelNotification(notification:NSNotification) {
+        
         notifications = notifications.filter { (n) -> Bool in
-            n.notification !== notification
+            n !== notification
         }
         
         if notification === pendingNotification {
             pendingNotification = nil
             rescheduleNextNotification()
+        }
+    }
+    
+    public func cancelNotification(notification:NSNotification) {
+        let idx = notifications.indexOf{ (n) -> Bool in
+            return n.notification === notification
+        }
+        if idx != nil {
+            cancelNotification(notifications[idx!])
         }
     }
     
@@ -90,7 +97,7 @@ public class JPScheduledNotificationCenter {
             notificationTimer = NSTimer(fireDate: nextNotification.fireDate, interval: 0, target: self, selector: #selector(fireNotification), userInfo: nil, repeats: false)
             NSRunLoop.mainRunLoop().addTimer(notificationTimer!, forMode: NSRunLoopCommonModes)
         }
-            
+        
     }
     
     @objc private func fireNotification() {
@@ -103,9 +110,6 @@ public class JPScheduledNotificationCenter {
         
         cancelNotification(pendingNotification!)
         
-        pendingNotification = nil
-        
-        rescheduleNextNotification()
     }
     
 }
