@@ -9,9 +9,9 @@ import UIKit
 
 public class JPScheduledNotificationCenter {
     
-    public static let defaultCenter = JPScheduledNotificationCenter(notificationCenter: NotificationCenter.default)
+    public static let `default` = JPScheduledNotificationCenter(notificationCenter: NotificationCenter.default)
     
-    private var notificationCenter: NotificationCenter
+    public let notificationCenter: NotificationCenter
     private var notifications: [JPScheduledNotification] = []
     private var pendingNotification: JPScheduledNotification?
     private var notificationTimer: Timer?
