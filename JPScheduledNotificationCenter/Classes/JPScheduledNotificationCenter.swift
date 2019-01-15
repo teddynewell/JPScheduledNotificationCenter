@@ -9,29 +9,29 @@ import UIKit
 
 public class JPScheduledNotificationCenter {
     
-    public static let defaultCenter = JPScheduledNotificationCenter(notificationCenter: NSNotificationCenter.defaultCenter())
+    public static let defaultCenter = JPScheduledNotificationCenter(notificationCenter: NotificationCenter.default)
     
-    private var notificationCenter:NSNotificationCenter
-    private var notifications:[JPScheduledNotification] = [JPScheduledNotification]()
-    private var pendingNotification:JPScheduledNotification?
-    private var notificationTimer:NSTimer?
+    private var notificationCenter: NotificationCenter
+    private var notifications: [JPScheduledNotification] = []
+    private var pendingNotification: JPScheduledNotification?
+    private var notificationTimer: Timer?
     
-    public required init(notificationCenter: NSNotificationCenter) {
+    public required init(notificationCenter: NotificationCenter) {
         self.notificationCenter = notificationCenter
     }
     
-    private var timedNotifications = [NSNotification]()
+    private var timedNotifications = [Notification]()
     
     // MARK: manage notifications
     // convenience method
-    public func scheduleNotification(notification: NSNotification, fireDate: NSDate) {
-        scheduleNotification(JPScheduledNotification(fireDate: fireDate, notification: notification))
+    public func schedule(notification: Notification, fireDate: Date) {
+        schedule(notification: JPScheduledNotification(fireDate: fireDate, notification: notification))
     }
     
     // actual method
-    public func scheduleNotification(notification: JPScheduledNotification) {
+    public func schedule(notification: JPScheduledNotification) {
         if let nextNotification = pendingNotification {
-            if notification.fireDate.compare(nextNotification.fireDate) == .OrderedAscending {
+            if notification.fireDate.compare(nextNotification.fireDate) == .orderedAscending {
                 pendingNotification = nil
             }
         }
@@ -48,7 +48,7 @@ public class JPScheduledNotificationCenter {
     }
     
     // cancel one notifications
-    public func cancelNotification(notification:JPScheduledNotification) {
+    public func cancel(notification: JPScheduledNotification) {
         
         notifications = notifications.filter { (n) -> Bool in
             n !== notification
@@ -60,22 +60,18 @@ public class JPScheduledNotificationCenter {
         }
     }
     
-    public func cancelNotification(notification:NSNotification) {
-        let idx = notifications.indexOf{ (n) -> Bool in
-            return n.notification === notification
+    public func cancel(notification: Notification) {
+        guard let existingNotification = notifications.first(where: { $0.notification == notification }) else {
+            return
         }
-        if idx != nil {
-            cancelNotification(notifications[idx!])
-        }
+        cancel(notification: existingNotification)
     }
     
     // MARK: internal notification management
     
     private func cancelTimer() {
-        if notificationTimer != nil {
-            notificationTimer!.invalidate()
-            notificationTimer = nil
-        }
+        notificationTimer?.invalidate()
+        notificationTimer = nil
     }
     
     private func rescheduleNextNotification() {
@@ -87,29 +83,25 @@ public class JPScheduledNotificationCenter {
         
         cancelTimer()
         
-        notifications.sortInPlace { (n1, n2) -> Bool in
+        notifications.sort { (n1, n2) -> Bool in
             // n1 is before n2?
-            return n1.fireDate.compare(n2.fireDate) == .OrderedAscending
+            return n1.fireDate.compare(n2.fireDate) == .orderedAscending
         }
         
         if let nextNotification = notifications.first {
             pendingNotification = nextNotification
-            notificationTimer = NSTimer(fireDate: nextNotification.fireDate, interval: 0, target: self, selector: #selector(fireNotification), userInfo: nil, repeats: false)
-            NSRunLoop.mainRunLoop().addTimer(notificationTimer!, forMode: NSRunLoopCommonModes)
+            notificationTimer = Timer(fireAt: nextNotification.fireDate, interval: 0, target: self, selector: #selector(fireNotification), userInfo: nil, repeats: false)
+            RunLoop.main.add(notificationTimer!, forMode: .common)
         }
         
     }
     
     @objc private func fireNotification() {
-        guard pendingNotification != nil else {
-            // something went very wrong :(
-            return
+        guard let next = pendingNotification else {
+            return // something went very wrong :(
         }
-        
-        notificationCenter.postNotification(pendingNotification!.notification)
-        
-        cancelNotification(pendingNotification!)
-        
+        notificationCenter.post(next.notification)
+        cancel(notification: next)
     }
     
 }
