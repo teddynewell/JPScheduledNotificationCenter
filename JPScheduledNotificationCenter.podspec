@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "JPScheduledNotificationCenter"
-  s.version          = "1.0.0-alpha"
+  s.version          = "1.0.0-beta"
   s.summary          = "A scheduled NSNotification manager."
 
 # This description is used to generate tags and improve search results.
