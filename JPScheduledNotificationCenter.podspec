@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "JPScheduledNotificationCenter"
-  s.version          = "1.0.0-beta"
+  s.version          = "1.0.0"
   s.summary          = "A scheduled NSNotification manager."
 
 # This description is used to generate tags and improve search results.
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
 
   s.homepage         = "https://github.com/teddynewell/JPScheduledNotificationCenter"
   s.license          = 'MIT'
-  s.author           = { "JamesPerlman" => "jam.e.perl@gmail.com" }
+  s.author           = { "JamesPerlman" => "jam.e.perl@gmail.com", "teddynewell" => "teddynewell@icloud.com" }
   s.source           = { :git => "https://github.com/teddynewell/JPScheduledNotificationCenter.git", :tag => s.version.to_s }
 
   s.ios.deployment_target = '8.0'
